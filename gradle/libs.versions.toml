@@ -1,0 +1,20 @@
+[versions]
+java = "17"
+spring-boot = "3.3.10"
+spring-dependency-management = "1.1.7"
+spring-cloud = "2023.0.5"
+lombok="1.18.34"
+jjwt="0.12.6"
+thluon-rest="v0.1.0-SNAPSHOT2"
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot"  }
+spring-dependency-management = {id="io.spring.dependency-management",version.ref="spring-dependency-management"}
+[libraries]
+lombok={module="org.projectlombok:lombok",version.ref="lombok"}
+spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud" }
+jjwt-core={group="io.jsonwebtoken",name="jjwt",version.ref="jjwt"}
+jjwt-impl={group="io.jsonwebtoken",name="jjwt-impl",version.ref="jjwt"}
+jjwt-jackson={group="io.jsonwebtoken",name="jjwt-jackson",version.ref="jjwt"}
+thluon-rest= {module="com.github.thientoan3596:spring.rest-common",version.ref="thluon-rest"}
+[bundles]
+jjwt=["jjwt-core","jjwt-impl","jjwt-jackson"]

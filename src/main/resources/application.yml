@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      routes:
+        - id: security-ms
+          uri: lb://security-ms
+          predicates:
+            - Path=/api/auth/v1/**
+        - id: storage-ms
+          uri: lb://storage-ms
+          predicates:
+            - Path=/api/storage/v1/**
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_URL:http://host.docker.internal:8761/eureka/}
+    renewal-interval-in-seconds: 30 # Heartbeat every 30 seconds
+    instance-info-replication-interval-seconds: 60
+    lease-expiration-duration-in-seconds: 90
+  instance:
+    prefer-ip-address: true
+jwt:
+  secret: ${JWT_SECRET:-r0M7GqBT5VAmx2871SJN88g7fdOpVIOh}
