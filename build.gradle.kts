@@ -15,7 +15,7 @@ dependencies {
     implementation(platform(libs.spring.cloud.dependencies))
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation(libs.thluon.rest)
     implementation(libs.bundles.jjwt)
     compileOnly(libs.lombok)
@@ -30,13 +30,16 @@ dependencies {
 tasks.bootJar {
     archiveFileName.set("api-gateway.jar")
 }
-tasks.bootRun{
-  doFirst {
+tasks.bootRun {
+    doFirst {
         file(".env").readLines().forEach {
-            val parts = it.trim().split("=", limit = 2)
-            if (parts.size == 2 && parts[0].isNotEmpty()) {
-                val (key, value) = parts
-                environment(key, value)
+            val cleanLine = it.trim().split("#")[0].trim()
+            if (cleanLine.isNotEmpty()) {
+                val parts = cleanLine.split("=", limit = 2)
+                if (parts.size == 2 && parts[0].isNotEmpty()) {
+                    val (key, value) = parts
+                    environment(key, value)
+                }
             }
         }
     }

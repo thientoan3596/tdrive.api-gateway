@@ -1,27 +1,38 @@
+server:
+  port: ${SERVER_PORT:8080}
 spring:
   application:
-    name: api-gateway
+    name: ${APPLICATION_NAME:api-gateway}
   cloud:
     discovery:
       enabled: true
     gateway:
       routes:
         - id: security-ms
-          uri: lb://security-ms
+          uri: ${ROUTE_SECURITY_MS:lb://security-ms}
           predicates:
             - Path=/api/auth/v1/**
         - id: storage-ms
-          uri: lb://storage-ms
+          uri: ${ROUTE_STORAGE_MS:lb://storage-ms}
           predicates:
             - Path=/api/storage/v1/**
 eureka:
   client:
+    enabled: ${EUREKA_CLIENT_ENABLE:true}
     serviceUrl:
       defaultZone: ${EUREKA_SERVER_URL:http://host.docker.internal:8761/eureka/}
-    renewal-interval-in-seconds: 30 # Heartbeat every 30 seconds
-    instance-info-replication-interval-seconds: 60
-    lease-expiration-duration-in-seconds: 90
+    renewal-interval-in-seconds: ${EUREKA_CLIENT_HEARTBEAT:30}
+    instance-info-replication-interval-seconds: ${EUREKA_CLIENT_INSTANCE_REPLICATION_INTERVAL:60}
+    lease-expiration-duration-in-seconds: ${EUREKA_CLIENT_LEASE_EXPIRATION_DURATION:90}
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDR:true}
 jwt:
   secret: ${JWT_SECRET:-r0M7GqBT5VAmx2871SJN88g7fdOpVIOh}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_EXPOSURE}
+  endpoint:
+    env:
+      show-values: ${ACTUATOR_SHOW_ENV}
