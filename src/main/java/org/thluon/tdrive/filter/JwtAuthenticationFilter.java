@@ -6,7 +6,7 @@ import com.github.thientoan3596.dto.ErrorResponseDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import java.security.SignatureException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
