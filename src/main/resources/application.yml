@@ -1,8 +1,9 @@
 server:
   port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework
 spring:
   application:
-    name: ${APPLICATION_NAME:api-gateway}
+    name: ${SPRING_APPLICATION_NAME:api-gateway}
   cloud:
     discovery:
       enabled: true
@@ -11,11 +12,21 @@ spring:
         - id: security-ms
           uri: ${ROUTE_SECURITY_MS:lb://security-ms}
           predicates:
-            - Path=/api/auth/v1/**
+            - Path=/auth/v1/**
+          filters:
+            - RewritePath=/auth/v1/?(?<path>.*), /$\{path}
         - id: storage-ms
           uri: ${ROUTE_STORAGE_MS:lb://storage-ms}
           predicates:
-            - Path=/api/storage/v1/**
+            - Path=/storage/v1/**
+          filters:
+            - RewritePath=/storage/v1/?(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 eureka:
   client:
     enabled: ${EUREKA_CLIENT_ENABLE:true}
@@ -24,8 +35,6 @@ eureka:
     renewal-interval-in-seconds: ${EUREKA_CLIENT_HEARTBEAT:30}
     instance-info-replication-interval-seconds: ${EUREKA_CLIENT_INSTANCE_REPLICATION_INTERVAL:60}
     lease-expiration-duration-in-seconds: ${EUREKA_CLIENT_LEASE_EXPIRATION_DURATION:90}
-  instance:
-    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDR:true}
 jwt:
   secret: ${JWT_SECRET:-r0M7GqBT5VAmx2871SJN88g7fdOpVIOh}
 management:
@@ -36,3 +45,6 @@ management:
   endpoint:
     env:
       show-values: ${ACTUATOR_SHOW_ENV}
+springdoc:
+  cache:
+    disabled: true

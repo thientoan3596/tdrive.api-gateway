@@ -16,6 +16,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation(libs.springdoc.webflux)
     implementation(libs.thluon.rest)
     implementation(libs.bundles.jjwt)
     compileOnly(libs.lombok)
@@ -32,7 +33,8 @@ tasks.bootJar {
 }
 tasks.bootRun {
     doFirst {
-        file(".env").readLines().forEach {
+        if(file(".env").exists()){
+          file(".env").readLines().forEach {
             val cleanLine = it.trim().split("#")[0].trim()
             if (cleanLine.isNotEmpty()) {
                 val parts = cleanLine.split("=", limit = 2)
@@ -42,5 +44,6 @@ tasks.bootRun {
                 }
             }
         }
+      }
     }
 }
