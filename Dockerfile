@@ -1,5 +1,6 @@
 FROM amazoncorretto:17
 WORKDIR /app
+RUN yum install -y curl && yum clean all
 COPY src ./src
 COPY gradle ./gradle/
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./

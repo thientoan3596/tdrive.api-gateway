@@ -27,6 +27,14 @@ spring:
             - Path=/v3/api-docs/**
           filters:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+    actuator:
+      verbose:
+        enabled: true
+  endpoint:
+    env:
+      show-values: ${ACTUATOR_SHOW_ENV}
+    gateway:
+      enabled: true
 eureka:
   client:
     enabled: ${EUREKA_CLIENT_ENABLE:true}
@@ -41,10 +49,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: ${ACTUATOR_EXPOSURE}
+        include: env,health,routes,gateway # ${ACTUATOR_EXPOSURE}
   endpoint:
     env:
       show-values: ${ACTUATOR_SHOW_ENV}
+    gateway:
+      enabled: true
 springdoc:
   cache:
     disabled: true
